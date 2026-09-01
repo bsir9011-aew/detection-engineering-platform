@@ -1,0 +1,12 @@
+{
+  "rule_id": "DET-001",
+  "name": "WinWord spawns PowerShell with EncodedCommand",
+  "description": "Detects Microsoft Word spawning PowerShell with an encoded command.",
+  "severity": "high",
+  "event_type": "process_creation",
+  "conditions": {
+    "parent_process_contains": "WINWORD.EXE",
+    "process_contains": "powershell.exe",
+    "command_line_contains": "EncodedCommand"
+  }
+}

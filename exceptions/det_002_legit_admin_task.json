@@ -1,0 +1,12 @@
+{
+  "exception_id": "EXC-001",
+  "rule_id": "DET-002",
+  "name": "Approved administrative encoded PowerShell task",
+  "reason": "Known administrative automation using encoded PowerShell.",
+  "conditions": {
+    "host_contains": "ADMIN-WS01",
+    "user_contains": "svc_automation",
+    "parent_process_contains": "cmd.exe",
+    "command_line_contains": "LEGIT_ADMIN_TASK"
+  }
+}

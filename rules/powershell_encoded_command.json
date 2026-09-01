@@ -1,0 +1,15 @@
+{
+  "rule_id": "DET-002",
+  "name": "PowerShell with EncodedCommand",
+  "description": "Detects PowerShell execution using an encoded command.",
+  "severity": "medium",
+  "event_type": "process_creation",
+  "conditions": {
+    "parent_process_contains": "",
+    "process_contains": "powershell.exe",
+    "command_line_contains_any": [
+      "EncodedCommand",
+      "-enc"
+    ]
+  }
+}
