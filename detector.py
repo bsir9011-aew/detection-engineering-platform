@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+from rule_validator import validate_rule, RuleValidationError
 
 
 RULES_DIR = Path("rules")
@@ -15,11 +16,36 @@ def load_rule(rule_path: str) -> dict:
 
 def load_rules() -> list[dict]:
     rules = []
+    seen_rule_ids = set()
 
     for rule_file in sorted(RULES_DIR.glob("*.json")):
-        rule = json.loads(
-            rule_file.read_text(encoding="utf-8")
-        )
+        try:
+            rule = json.loads(
+                rule_file.read_text(encoding="utf-8")
+            )
+
+            validate_rule(rule)
+
+            if rule["rule_id"] in seen_rule_ids:
+                print(
+                    f"Skipping duplicate rule_id {rule['rule_id']} "
+                    f"in {rule_file.name}"
+                )
+                continue
+
+            seen_rule_ids.add(rule["rule_id"])
+
+        except json.JSONDecodeError as error:
+            print(
+                f"Skipping malformed JSON {rule_file.name}: {error}"
+            )
+            continue
+
+        except RuleValidationError as error:
+            print(
+                f"Skipping invalid rule {rule_file.name}: {error}"
+            )
+            continue
 
         rules.append(rule)
 
